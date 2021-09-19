@@ -126,7 +126,7 @@ router.post(
 
     try {
       let student = await db.Student.findOne({
-        where: { email: req.user.email },
+        where: { email: email },
       });
 
       if (!student) {
@@ -284,15 +284,19 @@ router.get("/attendance/:course", auth, async (req, res) => {
 // @access  Private
 router.get("/attendance", auth, async (req, res) => {
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({
+      where: { email: req.user.email },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    Attendance.find({
-      roll: profile.roll,
-      year: profile.year,
+    db.Attendance.findAll({
+      where: {
+        roll: profile.roll,
+        year: profile.year,
+      },
     })
       .then((records) => {
         let total = records.length;
@@ -318,16 +322,18 @@ router.get("/attendance", auth, async (req, res) => {
 // @access  Private
 router.get("/percent/:course", auth, async (req, res) => {
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({ email: req.user.email });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    Attendance.find({
-      roll: profile.roll,
-      year: profile.year,
-      course: req.params.course,
+    db.Attendance.findAll({
+      where: {
+        roll: profile.roll,
+        year: profile.year,
+        course: req.params.course,
+      },
     })
       .then((records) => {
         let total = records.length;
