@@ -1,0 +1,374 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap");
+
+* {
+  font-family: "Nunito Sans", sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+  font-family: Roboto, "Montserrat", sans-serif;
+  color: #505962;
+}
+
+.offset::before {
+  display: block;
+  content: "";
+  height: 4rem;
+  margin-top: -4rem;
+}
+
+/* Navbar */
+
+.navbar {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 0.1rem;
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  padding-bottom: 8px;
+}
+
+.navbar-brand img {
+  background-color: white;
+  height: 3rem;
+}
+
+.navbar-nav li {
+  padding-right: 0.7rem;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #fff;
+  padding-top: 0.8rem;
+}
+
+.navbar-dark .navbar-nav .nav-link.active,
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #1ebba3;
+}
+
+/* -- Landing page -- */
+
+.home-inner {
+  background-image: url("./final-bg.png");
+  padding-bottom: 10px;
+  filter: blur(4px);
+}
+
+/*--- Extra Bootstrap Column Padding --*/
+[class*="col-"] {
+  padding: 1rem;
+}
+
+/*--- Bootstrap Mobile Gutter Fix --*/
+.row,
+.container-fluid {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+/*--- Fix for Fixed Navbar jumping on scroll --*/
+.fixed-top {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+/*--- Fixed Landing Page Section -- */
+.landing {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: table;
+  z-index: -1;
+}
+
+.home-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.home-inner {
+  position: fixed;
+  display: table;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.get_started:hover {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+/*--- iOS Fixed Background Image --*/
+.fixed-background {
+  position: relative;
+  width: 100%;
+}
+
+.fixed-wrap {
+  clip: rect(0, auto, auto, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -999 !important;
+}
+
+.fixed {
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.caption {
+  width: 100%;
+  max-width: 100%;
+  position: absolute;
+  top: 38%;
+  z-index: 1;
+  color: white;
+  text-transform: uppercase;
+}
+
+.caption h1 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: 0.29rem;
+  text-shadow: 0.1rem 0.1rem 0.95rem black;
+  padding-bottom: 1rem;
+}
+
+.caption h3 {
+  font-size: 2rem;
+  text-shadow: 0.1rem 0.1rem 0.95rem black;
+  padding-bottom: 1.6rem;
+}
+
+/* -- Features --*/
+
+.white-section {
+  margin-bottom: 0;
+}
+
+/* -- Other -- */
+
+.narrow {
+  width: 75%;
+  margin: 1.5rem auto;
+  padding-top: 2rem;
+}
+
+.narrow h1 {
+  font-size: 2.4rem;
+}
+
+.btn-secondary {
+  border-width: medium;
+  border-radius: 0;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  margin: 1rem;
+  border-color: #1ebba3;
+  background-color: #1ebba3;
+  color: white;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  border-color: #189582;
+  background-color: #189582;
+  color: white;
+}
+
+h3.heading {
+  text-align: center;
+  font-size: 1.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-bottom: 0px;
+  margin-bottom: 10px;
+}
+
+.heading-underline {
+  width: 3rem;
+  height: 0.2rem;
+  background-color: #1ebba3;
+  margin: 0 auto 2rem;
+}
+
+.feature svg.svg-inline--fa {
+  color: #1ebba3;
+}
+
+.feature h3 {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  padding-bottom: 0.4rem;
+}
+
+.feature p {
+  font-size: 1.1rem;
+}
+
+h2.contact-title {
+  text-align: center;
+  font-size: 1.9rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.feature-box {
+  padding: 20px;
+}
+
+/* -- contact -- */
+
+footer {
+  background-color: #40474e;
+  color: #fff;
+  padding: 2rem 0 2rem;
+  margin-top: 1rem;
+}
+
+footer img {
+  height: 7rem;
+}
+
+footer svg.svg-inline--fa {
+  font-size: 1.1rem;
+  margin: 1.2rem 0.5rem 0 0.2rem;
+}
+
+@media (max-width: 767px) {
+  .caption {
+    width: 100%;
+    max-width: 100%;
+    position: absolute;
+    top: 38%;
+    z-index: 1;
+    color: #fff;
+    text-transform: uppercase;
+  }
+
+  .caption h1 {
+    font-size: 2.2rem;
+    letter-spacing: 0.19rem;
+
+    padding-bottom: 0.5rem;
+  }
+
+  .caption h3 {
+    font-size: 2rem;
+    text-shadow: 0.1rem 0.1rem 0.95rem black;
+    padding-bottom: 1.6rem;
+  }
+
+  .btn-lg {
+    padding: 0.5rem 1.3rem;
+    font-size: 1.1rem;
+  }
+}
+
+/*============ BOOTSTRAP BREAK POINTS:
+
+Extra small (xs) devices (portrait phones, less than 576px)
+No media query since this is the default in Bootstrap
+
+Small (sm) devices (landscape phones, 576px and up)
+@media (min-width: 576px) { ... }
+
+Medium (md) devices (tablets, 768px and up)
+@media (min-width: 768px) { ... }
+
+Large (lg) devices (desktops, 992px and up)
+@media (min-width: 992px) { ... }
+
+Extra (xl) large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) { ... }
+
+=============*/
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.content {
+  height: 100vh;
+  display: flex;
+}
+
+section {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  transition: all 0.5s;
+}
+
+section:hover {
+  flex: 2;
+}
+
+.student {
+  background: url("Student.jpg");
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.student:hover {
+  background: url("Student.jpg") #85929e;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.faculty {
+  background: url("Professor.jpg");
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.faculty:hover {
+  background: url("Professor.jpg") #85929e;
+  background-position: center;
+  background-size: cover;
+  background-blend-mode: multiply;
+}
+
+.bln:hover {
+  color: #1ebba3;
+  font-weight: bold;
+}
