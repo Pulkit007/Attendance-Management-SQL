@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const db = require("../models");
 const { check, validationResult } = require("express-validator");
 const passport = require("passport");
 const keys = {
@@ -41,7 +42,11 @@ router.post(
     const { email, password, name, dept } = req.body;
 
     try {
-      let faculty = await Faculty.findOne({ email });
+      let faculty = await db.Faculty.findOne({
+        where: {
+          email: req.body.email,
+        },
+      });
 
       if (faculty) {
         return res
@@ -49,32 +54,44 @@ router.post(
           .json({ errors: [{ msg: "User already exists" }] });
       }
 
-      faculty = new Faculty({ email, password, name, dept });
-
-      const salt = await bcrypt.genSalt(10);
-
-      faculty.password = await bcrypt.hash(password, salt);
-
-      await faculty.save();
-
-      const payload = {
-        email: email,
-        name: name,
-        dept: dept,
-      };
-
-      jwt.sign(
-        payload,
-        keys.secretOrKey,
-        {
-          expiresIn: 360000,
-        },
-        (err, token) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
           if (err) throw err;
 
-          res.json({ success: true, token: token });
-        }
-      );
+          db.Faculty.create({
+            email: email,
+            password: hash,
+            name: name,
+            dept: dept,
+          })
+            .then((newFaculty) => {
+              const payload = {
+                email: email,
+                name: name,
+                dept: dept,
+              };
+
+              jwt.sign(
+                payload,
+                keys.secretOrKey,
+                {
+                  expiresIn: 360000,
+                },
+                (err, token) => {
+                  if (err) throw err;
+                  res.json({
+                    success: true,
+                    token: token,
+                  });
+                }
+              );
+            })
+            .catch((err) => {
+              console.log(err.message);
+              res.status(500).send("Status Error");
+            });
+        });
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server Error");
@@ -100,7 +117,11 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      let faculty = await Faculty.findOne({ email });
+      let faculty = await db.Faculty.findOne({
+        where: {
+          email: req.body.email,
+        },
+      });
 
       if (!faculty) {
         return res
@@ -148,7 +169,11 @@ router.post(
 // @access  Private
 router.get("/current", auth, async (req, res) => {
   try {
-    const profile = await Faculty.findOne({ email: req.user.email });
+    const profile = await db.Faculty.findOne({
+      where: {
+        email: req.user.email,
+      },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
@@ -167,7 +192,7 @@ router.get("/current", auth, async (req, res) => {
 router.post("/courses", auth, (req, res) => {
   const { course, year } = req.body;
 
-  Course.create({
+  db.Course.create({
     dept: req.user.dept,
     faculty: req.user.name,
     course,
@@ -187,7 +212,11 @@ router.post("/courses", auth, (req, res) => {
 // @desc    Get all courses offered by faculty
 // @access  Private
 router.get("/courses", auth, (req, res) => {
-  Course.find({ faculty: req.user.name })
+  db.Course.findAll({
+    where: {
+      faculty: req.user.name,
+    },
+  })
     .then((courses) => res.json(courses))
     .catch((err) =>
       res.status(404).json({
@@ -201,15 +230,16 @@ router.get("/courses", auth, (req, res) => {
 // @access  Private
 router.put("/archive/:course/:year", auth, (req, res) => {
   try {
-    Course.findOne({
-      faculty: req.user.name,
-      course: req.params.course,
-      year: req.params.year,
-      archived: false,
+    db.Course.findOne({
+      where: {
+        faculty: req.user.name,
+        course: req.params.course,
+        year: req.params.year,
+        archived: 0,
+      },
     })
       .then((course) => {
-        console.log(course);
-        course.archived = true;
+        course.archived = 1;
         course.save();
         res.json(course);
       })
@@ -223,13 +253,16 @@ router.put("/archive/:course/:year", auth, (req, res) => {
 // @desc    change the course offered by faculty to unarchived
 // @access  Private
 router.put("/unarchive/:course/:year", auth, (req, res) => {
-  Course.findOne({
-    faculty: req.user.name,
-    course: req.params.course,
-    year: req.params.year,
+  db.Course.findOne({
+    where: {
+      faculty: req.user.name,
+      course: req.params.course,
+      year: req.params.year,
+      archived: 1,
+    },
   })
     .then((course) => {
-      course.archived = false;
+      course.archived = 0;
       course.save();
       res.json(course);
     })
@@ -242,7 +275,12 @@ router.put("/unarchive/:course/:year", auth, (req, res) => {
 // @desc    Get course by year and course name
 // @access  Private
 router.get("/courses/:year/:course", auth, (req, res) => {
-  Course.find({ year: req.params.year, course: req.params.course })
+  db.Course.findAll({
+    where: {
+      year: req.params.year,
+      course: req.params.course,
+    },
+  })
     .then((courses) => res.json(courses))
     .catch((err) => {
       res.status(404).json({
@@ -255,9 +293,11 @@ router.get("/courses/:year/:course", auth, (req, res) => {
 // @desc    Get students of a year
 // @access  Private
 router.get("/students/:year", auth, (req, res) => {
-  Student.find({
-    year: req.params.year,
-    dept: req.user.dept,
+  db.Student.findAll({
+    where: {
+      year: req.params.year,
+      dept: req.user.dept,
+    },
   })
     .then((students) => res.json(students))
     .catch((err) =>
@@ -271,19 +311,23 @@ router.get("/students/:year", auth, (req, res) => {
 // @desc Mark attendance
 // @access Private
 router.post("/attendance/:year/:roll/:course", auth, (req, res) => {
-  Student.findOne({
-    roll: req.params.roll,
+  db.Student.findOne({
+    where: {
+      roll: req.params.roll,
+    },
   })
     .then((student) => {
       const { date, status } = req.body;
 
-      Course.findOne({
-        faculty: req.user.name,
-        year: req.params.year,
-        dept: req.user.dept,
-        course: req.params.course,
+      db.Course.findOne({
+        where: {
+          faculty: req.user.name,
+          year: req.params.year,
+          dept: req.user.dept,
+          course: req.params.course,
+        },
       }).then((course) => {
-        Attendance.create({
+        db.Attendance.create({
           roll: req.params.roll,
           course: req.params.course,
           year: req.params.year,
@@ -306,10 +350,12 @@ router.post("/attendance/:year/:roll/:course", auth, (req, res) => {
 // @desc    Get attendance of a student
 // @access  Private
 router.get("/attendance/:year/:roll/:course", auth, (req, res) => {
-  Attendance.find({
-    roll: req.params.roll,
-    year: req.params.year,
-    course: req.params.course,
+  db.Attendance.findAll({
+    where: {
+      roll: req.params.roll,
+      year: req.params.year,
+      course: req.params.course,
+    },
   })
     .then((records) => res.json(records))
     .catch((err) => console.log(err.message));
@@ -321,17 +367,21 @@ router.get("/attendance/:year/:roll/:course", auth, (req, res) => {
 router.put("/attendance/:year/:roll/:course/:date", auth, (req, res) => {
   const { status } = req.body;
 
-  Course.findOne({
-    faculty: req.user.name,
-    year: req.params.year,
-    dept: req.user.dept,
-    course: req.params.course,
-  }).then((course) => {
-    Attendance.findOne({
-      roll: req.params.roll,
+  db.Course.findOne({
+    where: {
+      faculty: req.user.name,
       year: req.params.year,
-      course: course.course,
-      date: req.params.date,
+      dept: req.user.dept,
+      course: req.params.course,
+    },
+  }).then((course) => {
+    db.Attendance.findOne({
+      where: {
+        roll: req.params.roll,
+        year: req.params.year,
+        course: course.course,
+        date: req.params.date,
+      },
     })
       .then((record) => {
         record.status = status;

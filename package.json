@@ -29,8 +29,11 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "mongoose": "^6.0.5",
+    "mysql2": "^2.3.0",
     "nodemon": "^2.0.12",
     "passport": "^0.4.1",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0"
   }
 }

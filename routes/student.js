@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const db = require("../models");
 const { check, validationResult } = require("express-validator");
 const keys = {
   secretOrKey: "secret",
@@ -46,7 +47,11 @@ router.post(
 
     //check if email already exists. if it does, do not register
     try {
-      let student = await Student.findOne({ email });
+      let student = await db.Student.findOne({
+        where: {
+          email: req.body.email,
+        },
+      });
 
       if (student) {
         return res
@@ -54,41 +59,47 @@ router.post(
           .json({ errors: [{ msg: "User already exists" }] });
       }
 
-      student = new Student({
-        email,
-        password,
-        name,
-        roll,
-        dept,
-        year,
-      });
-
-      const salt = await bcrypt.genSalt(10);
-
-      student.password = await bcrypt.hash(password, salt);
-
-      await student.save();
-
-      const payload = {
-        email: email,
-        name: name,
-        roll: roll,
-        dept: dept,
-        year: year,
-      };
-
-      jwt.sign(
-        payload,
-        keys.secretOrKey,
-        {
-          expiresIn: 360000,
-        },
-        (err, token) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
           if (err) throw err;
 
-          res.json({ success: true, token: token });
-        }
-      );
+          db.Student.create({
+            email: email,
+            password: hash,
+            name: name,
+            roll: roll,
+            dept: dept,
+            year: year,
+          })
+            .then((newStudent) => {
+              const payload = {
+                email: email,
+                name: name,
+                roll: roll,
+                dept: dept,
+                year: year,
+              };
+
+              jwt.sign(
+                payload,
+                keys.secretOrKey,
+                {
+                  expiresIn: 360000,
+                },
+                (err, token) => {
+                  res.json({
+                    success: true,
+                    token: token,
+                  });
+                }
+              );
+            })
+            .catch((err) => {
+              console.log(err.message);
+              res.status(500).send("Status Error");
+            });
+        });
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send("Server Error");
@@ -114,7 +125,9 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      let student = await Student.findOne({ email });
+      let student = await db.Student.findOne({
+        where: { email: req.user.email },
+      });
 
       if (!student) {
         return res
@@ -162,7 +175,9 @@ router.post(
 // @access  Private
 router.get("/current", auth, async (req, res) => {
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({
+      where: { email: req.user.email },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
@@ -179,16 +194,21 @@ router.get("/current", auth, async (req, res) => {
 // @desc    Get courses of that batch
 // @access  Private
 router.get("/courses", auth, async (req, res) => {
+  console.log(req.user);
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({
+      where: { email: req.user.email },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    Course.find({
-      year: profile.year,
-      dept: profile.dept,
+    db.Course.findAll({
+      where: {
+        year: profile.year,
+        dept: profile.dept,
+      },
     })
       .then((courses) => res.json(courses))
       .catch((err) =>
@@ -205,15 +225,19 @@ router.get("/courses", auth, async (req, res) => {
 // @access  Private
 router.get("/courses/:course", auth, async (req, res) => {
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({
+      where: { email: req.user.email },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    Course.find({
-      year: profile.year,
-      course: req.params.course,
+    db.Course.findAll({
+      where: {
+        year: profile.year,
+        course: req.params.course,
+      },
     })
       .then((courses) => res.json(courses))
       .catch((err) =>
@@ -230,16 +254,20 @@ router.get("/courses/:course", auth, async (req, res) => {
 // @access  Private
 router.get("/attendance/:course", auth, async (req, res) => {
   try {
-    const profile = await Student.findOne({ email: req.user.email });
+    const profile = await db.Student.findOne({
+      where: { email: req.user.email },
+    });
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
     }
 
-    Attendance.find({
-      roll: profile.roll,
-      year: profile.year,
-      course: req.params.course,
+    db.Attendance.findAll({
+      where: {
+        roll: profile.roll,
+        year: profile.year,
+        course: req.params.course,
+      },
     })
       .then((records) => {
         res.json(records);
