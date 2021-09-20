@@ -35,9 +35,9 @@ const FacultyAttendance = ({
   return students.length > 0 ? (
     <Fragment>
       <div className="grid-container">
-        <div className="menu-icon">
+        {/* <div className="menu-icon">
           <i className="fas fa-bars header__menu"></i>
-        </div>
+        </div> */}
 
         <header className="header">
           <div className="header__logo">Attendance DashBoard</div>
@@ -45,10 +45,10 @@ const FacultyAttendance = ({
         <Sidebar user={user} />
 
         <div>
-          <h1 style={{ paddingLeft: "100px", paddingTop: "15px" }}>
+          <h1 style={{ paddingLeft: "15px", paddingTop: "15px" }}>
             {match.params.course}{" "}
           </h1>
-          <h5 style={{ paddingLeft: "25px" }}>
+          <h5 style={{ paddingLeft: "15px" }}>
             <b>Choose date: </b>
           </h5>
           <input

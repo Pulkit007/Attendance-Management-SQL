@@ -200,7 +200,6 @@ export const loginFaculty = (email, password) => async (dispatch) => {
 
 // Logout / Clear Profile
 export const logout = () => (dispatch) => {
-  console.log("test");
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
 };

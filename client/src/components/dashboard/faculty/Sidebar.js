@@ -46,7 +46,7 @@ export const Sidebar = ({ auth: { user }, logout }) => {
           </li>
         </Link>
 
-        <Link to="/login" style={{ color: "white", fontWeight: "500px" }}>
+        <Link to="/" style={{ color: "white", fontWeight: "500px" }}>
           <li className="sidenav__list-item" onClick={logout}>
             <b>Logout</b>{" "}
           </li>

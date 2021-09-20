@@ -298,6 +298,7 @@ router.get("/students/:year", auth, (req, res) => {
       year: req.params.year,
       dept: req.user.dept,
     },
+    order: [["roll", "ASC"]],
   })
     .then((students) => res.json(students))
     .catch((err) =>

@@ -10,16 +10,12 @@ export const Card = ({
   unarchive,
   course: { course, archived, year, dept },
 }) => {
-  console.log(course);
-
   const Archive = async (e) => {
-    console.log("archivee");
     e.preventDefault();
     archive(course, year);
   };
 
   const Unarchive = async (e) => {
-    console.log("unarchivee");
     e.preventDefault();
     unarchive(course, year);
   };
