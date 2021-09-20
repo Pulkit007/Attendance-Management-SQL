@@ -23,6 +23,7 @@ import StudentDetails from "./components/dashboard/faculty/StudentDetails";
 
 //Student
 import StudentHome from "./components/dashboard/student/StudentHome";
+import StudentAttendance from "./components/dashboard/student/Attendance";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -61,6 +62,11 @@ function App() {
               exact
               path="/student/courses"
               component={StudentHome}
+            />
+            <PrivateRoute
+              exact
+              path="/student/courses/:course"
+              component={StudentAttendance}
             />
           </Switch>
         </Fragment>
