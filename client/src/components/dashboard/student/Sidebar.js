@@ -19,19 +19,21 @@ export const Sidebar = ({ auth: { user }, logout }) => {
           </b>
         </li>
 
-        <li className="sidenav__list-item">
-          <Link
-            style={{ color: "white", fontWeight: "500px" }}
-            to="/student/courses"
-          >
-            <b>Dashboard</b>
-          </Link>
-        </li>
-        <li className="sidenav__list-item" onClick={logout}>
-          <Link to="/" style={{ color: "white", fontWeight: "500px" }}>
-            <b>Logout</b>
-          </Link>
-        </li>
+        <Link
+          style={{ color: "white", fontWeight: "500px" }}
+          to="/student/courses"
+        >
+          {" "}
+          <li className="sidenav__list-item">
+            <b>Dashboard</b>{" "}
+          </li>
+        </Link>
+        <Link to="/" style={{ color: "white", fontWeight: "500px" }}>
+          {" "}
+          <li className="sidenav__list-item" onClick={logout}>
+            <b>Logout</b>{" "}
+          </li>
+        </Link>
       </ul>
     </aside>
   );
