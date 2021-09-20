@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { setAlert } from "../../../actions/alert";
+import { loginStudent, studentRegister } from "../../../actions/auth";
+import PropTypes from "prop-types";
+import store from "../../../store";
 import "../Slide.css";
 
-const StudentLogin = () => {
+const StudentLogin = ({
+  setAlert,
+  studentRegister,
+  loginStudent,
+  isAuthenticated,
+}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,7 +32,6 @@ const StudentLogin = () => {
     signUpButton = document.getElementById("signUp");
     signInButton = document.getElementById("signIn");
     container = document.getElementById("container");
-    console.log("useeffect");
   }, []);
 
   const addClass = () => {
@@ -35,15 +45,29 @@ const StudentLogin = () => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const login = async (e) => {
+    e.preventDefault();
+    loginStudent(email, password);
+  };
+
+  const register = async (e) => {
+    e.preventDefault();
+    studentRegister({ name, email, password, roll, dept, year });
+  };
+
+  if (isAuthenticated) {
+    return <Redirect to="/student/courses" />;
+  }
+
   return (
     <div className="body">
       <h1 style={{ textAlign: "center", fontWeight: "700", fontSize: "55" }}>
         <b>Student Login</b>
       </h1>
 
-      <div className="container" id="container" style={{ height: "575px" }}>
+      <div className="container" id="container" style={{ height: "580px" }}>
         <div className="form-container sign-up-container">
-          <form action="#">
+          <form action="#" onSubmit={(e) => register(e)}>
             <h1>Create Account</h1>
             <input
               type="text"
@@ -97,7 +121,7 @@ const StudentLogin = () => {
           </form>
         </div>
         <div className="form-container sign-in-container">
-          <form action="#">
+          <form action="#" onSubmit={(e) => login(e)}>
             <h1>Sign in</h1>
             <input
               type="email"
@@ -141,4 +165,18 @@ const StudentLogin = () => {
   );
 };
 
-export default StudentLogin;
+StudentLogin.propTypes = {
+  loginStudent: PropTypes.func.isRequired,
+  studentRegister: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, {
+  setAlert,
+  loginStudent,
+  studentRegister,
+})(StudentLogin);

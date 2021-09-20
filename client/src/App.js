@@ -21,6 +21,9 @@ import Archive from "./components/dashboard/faculty/Archive";
 import FacultyAttendance from "./components/dashboard/faculty/Attendance";
 import StudentDetails from "./components/dashboard/faculty/StudentDetails";
 
+//Student
+import StudentHome from "./components/dashboard/student/StudentHome";
+
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -53,6 +56,11 @@ function App() {
               exact
               path="/faculty/attendance/:course/:roll/:year"
               component={StudentDetails}
+            />
+            <PrivateRoute
+              exact
+              path="/student/courses"
+              component={StudentHome}
             />
           </Switch>
         </Fragment>
