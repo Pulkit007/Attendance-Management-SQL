@@ -9,6 +9,7 @@ import store from "./store";
 import Choose from "./components/auth/Choose";
 
 //Authentication
+import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing/Landing";
 import FacultyLogin from "./components/auth/faculty/Login";
 import StudentLogin from "./components/auth/student/Login";
@@ -30,6 +31,7 @@ function App() {
       <Router>
         <Fragment>
           <Route exact path="/" component={Landing} />
+          <Alert />
           <Switch>
             <Route exact path="/login" component={Choose} />
             <Route exact path="/register" component={Choose} />

@@ -55,7 +55,7 @@ const Archive = ({
               <span>Archived courses</span>
             </Link>
 
-            <Link to="/login" style={{ color: "white", fontWeight: "500px" }}>
+            <Link to="/" style={{ color: "white", fontWeight: "500px" }}>
               <span onClick={logout}>Logout</span>
             </Link>
           </div>

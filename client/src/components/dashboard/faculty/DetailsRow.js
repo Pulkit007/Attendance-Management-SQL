@@ -24,11 +24,7 @@ const DetailsRow = ({
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const Submit = async (e) => {
-    console.log("inside submit");
-    console.log(status);
     status = update;
-    console.log(update);
-    console.log(status);
     e.preventDefault();
     updateAttendance(year, roll, course, date, { status });
     getStudentAttendance(year, roll, course);

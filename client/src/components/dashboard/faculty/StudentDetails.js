@@ -42,9 +42,9 @@ const StudentDetails = ({
   return studentRecords.length > 0 ? (
     <Fragment>
       <div className="grid-container">
-        <div className="menu-icon">
+        {/* <div className="menu-icon">
           <i className="fas fa-bars header__menu"></i>
-        </div>
+        </div> */}
 
         <header className="header">
           <div className="header__logo">Attendance DashBoard</div>
