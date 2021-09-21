@@ -1,6 +1,6 @@
 import React from "react";
 import "../../../App.css";
-import logo from "./iiitdm-logo.png";
+import logo from "./iiitdmj_logo-removebg-preview.png";
 import { Link } from "react-router-dom";
 
 export const Landing = () => {
