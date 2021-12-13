@@ -354,4 +354,36 @@ router.get("/percent/:course", auth, async (req, res) => {
   }
 });
 
+// @route   GET api/chat/:course/:year
+// @desc    Get chat
+// @access  Public
+router.get("/chat/:course/:year", (req, res) => {
+  db.Chat.findAll({
+    where: {
+      course: req.params.course,
+      year: req.params.year,
+    },
+  })
+    .then((comments) => res.json(comments))
+    .catch((err) =>
+      res.status(404).json({
+        error: "No comments found",
+      })
+    );
+});
+
+// @route   Post api/chat/:course/:year
+// @desc    Post comment
+// @access  Private
+router.post("/chat/:course/:year", auth, (req, res) => {
+  db.Chat.create({
+    from: req.user.name,
+    course: req.params.course,
+    year: req.params.year,
+    msg: req.body.msg,
+  })
+    .then((chat) => res.json(chat))
+    .catch((err) => console.error(err.message));
+});
+
 module.exports = router;
