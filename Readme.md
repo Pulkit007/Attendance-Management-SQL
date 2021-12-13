@@ -45,4 +45,3 @@ Then in the new terminal window run the following commands
 cd client
 npm start
 ```
-=======
