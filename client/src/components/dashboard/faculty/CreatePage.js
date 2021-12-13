@@ -29,6 +29,13 @@ const CreatePage = ({ auth: { user }, logout }) => {
 
             <Link
               style={{ color: "white", fontWeight: "500px" }}
+              to="/faculty/chat"
+            >
+              <span className="">Chat</span>
+            </Link>
+
+            <Link
+              style={{ color: "white", fontWeight: "500px" }}
               to="/faculty/archives"
             >
               <span>Archived courses</span>

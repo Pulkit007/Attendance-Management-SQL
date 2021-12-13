@@ -393,4 +393,36 @@ router.put("/attendance/:year/:roll/:course/:date", auth, (req, res) => {
   });
 });
 
+// @route   GET api/comment/:id
+// @desc    Get comment
+// @access  Public
+router.get("/chat/:course/:year", (req, res) => {
+  db.Chat.findAll({
+    where: {
+      course: req.params.course,
+      year: req.params.year,
+    },
+  })
+    .then((comments) => res.json(comments))
+    .catch((err) =>
+      res.status(404).json({
+        error: "No comments found",
+      })
+    );
+});
+
+// @route   GET api/comment/:id
+// @desc    Get comment
+// @access  Public
+router.post("/chat/:course/:year", auth, (req, res) => {
+  db.Chat.create({
+    from: req.user.name,
+    course: req.params.course,
+    year: req.params.year,
+    msg: req.body.msg,
+  })
+    .then((chat) => res.json(chat))
+    .catch((err) => console.error(err.message));
+});
+
 module.exports = router;

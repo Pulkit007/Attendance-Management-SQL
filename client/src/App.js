@@ -19,6 +19,8 @@ import FacultyHome from "./components/dashboard/faculty/FacultyHome";
 import CreatePage from "./components/dashboard/faculty/CreatePage";
 import Archive from "./components/dashboard/faculty/Archive";
 import FacultyAttendance from "./components/dashboard/faculty/Attendance";
+import FacRoom from "./components/dashboard/faculty/Room";
+import FacChatpage from "./components/dashboard/faculty/Chatpage";
 import StudentDetails from "./components/dashboard/faculty/StudentDetails";
 
 //Student
@@ -45,6 +47,12 @@ function App() {
               exact
               path="/faculty/courses"
               component={FacultyHome}
+            />
+            <PrivateRoute exact path="/faculty/chat" component={FacRoom} />
+            <PrivateRoute
+              exact
+              path="/faculty/chat/:course/:year"
+              component={FacChatpage}
             />
             <PrivateRoute exact path="/faculty/archives" component={Archive} />
             <PrivateRoute exact path="/faculty/create" component={CreatePage} />

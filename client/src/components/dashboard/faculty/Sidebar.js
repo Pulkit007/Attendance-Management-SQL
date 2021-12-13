@@ -39,6 +39,15 @@ export const Sidebar = ({ auth: { user }, logout }) => {
 
         <Link
           style={{ color: "white", fontWeight: "500px" }}
+          to="/faculty/chat"
+        >
+          <li className="sidenav__list-item">
+            <b>Chat</b>
+          </li>
+        </Link>
+
+        <Link
+          style={{ color: "white", fontWeight: "500px" }}
           to="/faculty/archives"
         >
           <li className="sidenav__list-item">
