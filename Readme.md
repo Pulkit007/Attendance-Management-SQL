@@ -45,3 +45,11 @@ Then in the new terminal window run the following commands
 cd client
 npm start
 ```
+
+![home](./images/img1.png)
+![section](./images/img2.png)
+![login](./images/img3.png)
+![dashboard](./images/img4.png)
+![create](./images/img7.png)
+![student](./images/img5.png)
+![chat](./images/img6.png)
